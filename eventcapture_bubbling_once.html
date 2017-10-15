@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="bod">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+  *, *:before, *:after { box-sizing: inherit; }
+
+  div {
+    width:100%;
+    padding:100px;
+  }
+
+  .one {
+    background: thistle;
+  }
+
+  .two {
+    background:mistyrose;
+  }
+
+  .three {
+    background:coral;
+  }
+</style>
+
+<button></button>
+<script>
+
+const divs = document.querySelectorAll('div');
+const button = document.querySelector('button');
+
+function logText(e) {
+  console.log(this.classList.value);
+  // This logs three, two, and one because of event bubbling:
+  // When you click it will ripple up all the way to the top of the document
+  // Browser captures all events, top down, storing clicks
+  // Starts at bottom and bubbles up
+  //e.stopPropogation(); // stop bubbling
+}
+
+// Setting capture: true means we will run the function while capturing down
+divs.forEach(div => div.addEventListener('click', logText, {
+  capture: false,
+  once: true
+}));
+// once: true will listen for a click once and then unbind itself
+// see below for only allowing button to be clicked once before page reload
+button.addEventListener('click', () => {
+  console.log('Click!!!');
+}, {
+  once: true
+});
+
+
+</script>
+</body>
+</html>
